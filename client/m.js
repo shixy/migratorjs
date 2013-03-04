@@ -6,6 +6,7 @@ Migrator = {
         var func = eval(cfg.funcPath);
         var funcPath = cfg.funcPath;
         var thisAttrs = cfg.thisAttrs;
+        var moveFailure = false;
         if (typeof func != 'function') {
             console.log('func is not a function: ' + JSON.stringify(func));
             return null;
@@ -24,8 +25,15 @@ Migrator = {
             success:function (tokenId) {
                 Migrator.tokenId = tokenId;
                 console.log('moved function'+ funcPath+'to sever success!');
+            },
+            error : function(){
+                alert('迁移函数失败！请确认云端服务是否开启！');
+                moveFailure = true;
             }
         });
+        if(moveFailure){
+            return;
+        }
         var tf = (function(){
             var ctx = {};
             for(var i in thisAttrs){
